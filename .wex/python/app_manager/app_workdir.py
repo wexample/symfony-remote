@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from wexample_wex_addon_dev_php.workdir.php_symfony_workdir import PhpSymfonyWorkdir
+from wexample_wex_addon_dev_php.workdir.php_package_workdir import PhpPackageWorkdir
 
 
-class AppWorkdir(PhpSymfonyWorkdir):
+class AppWorkdir(PhpPackageWorkdir):
     pass

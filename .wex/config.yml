@@ -1,7 +1,7 @@
 domain: symfony-remote.wex
 global:
   name: symfony-remote
-  type: php-symfony
+  type: php-package
   version: 1.0.0
 wex:
   migration: 1
