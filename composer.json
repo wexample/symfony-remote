@@ -1,4 +1,11 @@
 {
   "name": "wexample/symfony-remote",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Wexample\\SymfonyRemote\\": "src/"
+    }
+  }
 }
