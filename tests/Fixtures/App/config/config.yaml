@@ -1,2 +1,14 @@
 wexample_symfony_remote:
   clients: {}
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Wexample\SymfonyRemote\Tests\Fixtures\Remote\:
+    resource: '../../Remote'
+
+  # Public so the test container exposes it even though nothing injects it yet.
+  Wexample\SymfonyRemote\Service\RemoteRegistry:
+    public: true

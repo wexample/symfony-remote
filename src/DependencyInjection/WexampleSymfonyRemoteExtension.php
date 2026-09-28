@@ -4,6 +4,7 @@ namespace Wexample\SymfonyRemote\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Wexample\SymfonyHelpers\DependencyInjection\AbstractWexampleSymfonyExtension;
+use Wexample\SymfonyRemote\Interface\RemoteInterface;
 
 class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
 {
@@ -17,5 +18,9 @@ class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
         );
 
         $this->processConfiguration(new Configuration(), $configs);
+
+        $container
+            ->registerForAutoconfiguration(RemoteInterface::class)
+            ->addTag(RemoteInterface::TAG);
     }
 }
