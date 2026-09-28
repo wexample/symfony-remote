@@ -1,5 +1,17 @@
 wexample_symfony_remote:
-  clients: {}
+  clients:
+    demo:
+      class: Wexample\SymfonyRemote\Tests\Fixtures\Client\DemoApiClient
+      label: Demo API
+      base_url: https://demo.test
+      api_key: secret
+      headers: { X-Test: 'yes', X-Empty: '' }
+      options: { timeout: 30, retries: 1, retry_delay: 0.01 }
+    unset_url:
+      base_url: '%env(default::REMOTE_TEST_MISSING_URL)%'
+    limited:
+      base_url: https://limited.test
+      rate_limit: { policy: fixed_window, limit: 1, interval: '2 seconds' }
 
 services:
   _defaults:
@@ -8,6 +20,20 @@ services:
 
   Wexample\SymfonyRemote\Tests\Fixtures\Remote\:
     resource: '../../Remote'
+
+  # Every configured client answers from this queue instead of the network.
+  test.mock_handler:
+    class: GuzzleHttp\Handler\MockHandler
+    public: true
+
+  test.handler_stack:
+    class: GuzzleHttp\HandlerStack
+    factory: [GuzzleHttp\HandlerStack, create]
+    arguments: ['@test.mock_handler']
+
+  Wexample\SymfonyRemote\Service\ApiClientFactory:
+    arguments:
+      $handlerStack: '@test.handler_stack'
 
   # Public so the test container exposes it even though nothing injects it yet.
   Wexample\SymfonyRemote\Service\RemoteRegistry:

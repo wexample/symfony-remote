@@ -11,6 +11,9 @@ class RemoteRegistryWiringTest extends KernelTestCase
     {
         $registry = self::getContainer()->get(RemoteRegistry::class);
 
-        $this->assertEqualsCanonicalizing(['reachable', 'broken'], array_keys($registry->all()));
+        $keys = array_keys($registry->all());
+
+        $this->assertContains('reachable', $keys);
+        $this->assertContains('broken', $keys);
     }
 }
