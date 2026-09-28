@@ -72,7 +72,7 @@ from configuration, since that is the case with the most boilerplate today.
 - **Command `remote:status [key] [--format=table|json]`**: checks every remote, or one of
   them. The exit code is non-zero when one is `Down`, so it can run from cron or a probe.
 - **Credentials**: environment variables and Symfony secrets only in v1, read through the
-  configuration above. No credentials entity yet (see questions).
+  configuration above. No credentials entity yet (see Decisions).
 
 What stays out of this package:
 - per-user authentication, such as Syrtis' user token kept in the session: it depends on the

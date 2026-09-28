@@ -1,14 +1,47 @@
 {
   "name": "wexample/symfony-remote",
-  "version": "1.0.2",
+  "description": "Registry, health checks and configuration of the external services a Symfony app talks to",
   "type": "library",
   "license": "MIT",
+  "version": "1.0.2",
   "autoload": {
     "psr-4": {
       "Wexample\\SymfonyRemote\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Wexample\\SymfonyRemote\\Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "weeger",
+      "email": "romain.weeger@wexample.com"
+    }
+  ],
   "require": {
-    "php": ">=8.5"
+    "php": ">=8.5",
+    "symfony/rate-limiter": "^7.4",
+    "wexample/php-api": ">=5.0.0",
+    "wexample/symfony-helpers": ">=11.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*",
+    "wexample/symfony-testing": ">=1.0.86"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../*",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
+  "extra": {
+    "install": {
+      "bundle_env": "all"
+    }
   }
 }
