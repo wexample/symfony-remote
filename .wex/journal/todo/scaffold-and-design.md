@@ -6,8 +6,14 @@ Author: agent, revised with the owner on 2026-09-28
 
 ## Status
 
-Proposal written and validated with the owner on 2026-09-28 (decisions at the end). Stop
-and report after step 1.
+Validated with the owner on 2026-09-28 (decisions at the end). Steps 1–5 done on
+2026-09-28: 16 tests green. Step 6 waits for the owner's go.
+
+Found while building step 3: a configured client must keep php-api `Client`'s constructor
+(base URL, API key, Guzzle client, headers, options). `SyrtisClient` does not — it takes a host
+and an API version — so Syrtis cannot be declared in configuration as the example below
+shows; it would be built by the app and declared as a `RemoteInterface` service instead,
+unless its constructor is aligned on `Client`'s.
 
 Paths are relative to the PHP suite root (`PACKAGES/PHP/packages/wexample/`). Read
 `symfony-tunnels/.wex/journal/todo/todo-common.md` first: layout, tests, docs, naming.

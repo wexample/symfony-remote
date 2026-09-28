@@ -1,1 +1,31 @@
-The repository does not provide any concrete code that could be documented for now.
+## Architecture
+
+Everything lives under `Wexample\SymfonyRemote\` (PSR-4 on `src/`): `Interface/` the remote contract, `Class/` value objects and the php-api adapters, `Enum/` the states, `Service/` the registry and the client factory, `Command/` the console entry point. The package depends on `wexample/php-api` for the clients it builds, and on `symfony/rate-limiter` for shared quotas.
+
+### Remotes and the registry
+
+{{ path("src/Interface/RemoteInterface.php") }} is the whole contract: a key, a label, `checkStatus()`. {{ path("src/DependencyInjection/WexampleSymfonyRemoteExtension.php") }} registers it for autoconfiguration under `RemoteInterface::TAG`, so implementing it is enough. {{ path("src/Service/RemoteRegistry.php") }} receives the tagged services, indexes them by key — two remotes sharing a key fail the container — and checks them. `check()` wraps the remote's own check: it measures the latency with `hrtime()` and turns any `Throwable` into `RemoteStatus::down($message)`, because a status page must survive the one remote that breaks. That is the only place the package catches everything.
+
+{{ path("src/Class/RemoteStatus.php") }} is a readonly value: a {{ path("src/Enum/RemoteState.php") }} (`Up`, `Down`, `Unconfigured`), a message, the latency in milliseconds and the check date.
+
+### Clients from configuration
+
+{{ path("src/DependencyInjection/Configuration.php") }} declares `clients.<key>`. Header names keep their dashes (`normalizeKeys(false)`): Symfony would otherwise turn `X-Api-Key` into `X_Api_Key`. For each entry, the extension registers three things:
+
+1. a {{ path("src/Class/ClientDefinition.php") }}, the entry with its environment placeholders — resolved when the container builds it. It answers `getMissingSettings()` (an empty `base_url`, or a declared `api_key` resolving empty) and maps `options` to php-api's `ClientOptions`;
+2. the client service `wexample_symfony_remote.client.<key>`, built by {{ path("src/Service/ApiClientFactory.php") }}. The factory builds the Guzzle client itself, so it can push {{ path("src/Class/RateLimitMiddleware.php") }} on its handler stack, then calls the configured class with php-api `Client`'s constructor. The class is aliased to the service when a single entry uses it;
+3. an {{ path("src/Class/ApiClientRemote.php") }} under the same key, tagged as a remote. Its check reports `Unconfigured` for missing settings, and otherwise requests the client's `PING_PATH`: an error raises php-api's `ApiException`, which the registry reports with its message — more useful than `checkConnection()`'s boolean.
+
+### Shared quotas
+
+`prepend()` turns each `rate_limit` into a framework rate limiter named `wexample_remote_<key>`, with `lock_factory: auto` so that `symfony/lock` stays optional. Storage, policies and locking are the framework's own. The client service receives the limiter factory; the middleware creates the limiter for the client's key and, before each request, consumes a token, waiting for the window whenever it is refused. It sits in the Guzzle stack rather than in a php-api subclass, so it works for any client class.
+
+php-api's own `rate_limit_delay` spaces the requests of one client instance, which is one PHP process; `rate_limit` counts across all of them.
+
+### The command
+
+{{ path("src/Command/StatusCommand.php") }} extends `AbstractBundleCommand`, which names it `remote:status` from the bundle and the class. It prints a table or JSON and returns `FAILURE` as soon as one status is `Down`.
+
+### Tests
+
+`tests/Fixtures/App/AppKernel.php` boots the bundle on `symfony-testing`'s fixture kernel. Its configuration declares three clients — one complete, one missing its URL, one with a quota — and replaces the Guzzle handlers of `ApiClientFactory` by a shared `MockHandler`, so every client answers from a queue the tests fill.
