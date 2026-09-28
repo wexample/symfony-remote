@@ -90,10 +90,6 @@ class StatusCommand extends AbstractBundleCommand
         return [
             'key' => $key,
             'label' => $this->registry->get($key)->getLabel(),
-            'state' => $status->state->value,
-            'latency' => $status->latency,
-            'message' => $status->message,
-            'checkedAt' => $status->checkedAt->format(DATE_ATOM),
-        ];
+        ] + $status->toArray();
     }
 }

@@ -33,6 +33,21 @@ final readonly class RemoteStatus
         return new self(RemoteState::Unconfigured, $message);
     }
 
+    /**
+     * The shape the console and the screens report a status in.
+     *
+     * @return array{state: string, message: string|null, latency: float|null, checkedAt: string}
+     */
+    public function toArray(): array
+    {
+        return [
+            'state' => $this->state->value,
+            'message' => $this->message,
+            'latency' => $this->latency,
+            'checkedAt' => $this->checkedAt->format(DATE_ATOM),
+        ];
+    }
+
     public function withLatency(float $latency): self
     {
         return new self($this->state, $this->message, $latency, $this->checkedAt);
