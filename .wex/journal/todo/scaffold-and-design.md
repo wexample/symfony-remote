@@ -6,8 +6,10 @@ Author: agent, revised with the owner on 2026-09-28
 
 ## Status
 
-Validated with the owner on 2026-09-28 (decisions at the end). Steps 1–5 done on
-2026-09-28: 16 tests green. Step 6 waits for the owner's go.
+Validated with the owner on 2026-09-28 (decisions at the end). All steps done on
+2026-09-28: 16 tests green; `symfony-wex` declares `AgentServerRemote` and `WexBinaryRemote`
+(checked through the registry with a mock HTTP client and fake binaries — `symfony-wex` has
+no test suite of its own). Next: `symfony-remote-ds` and `symfony-remote-demo`.
 
 Found while building step 3: a configured client must keep php-api `Client`'s constructor
 (base URL, API key, Guzzle client, headers, options). `SyrtisClient` does not — it takes a host
