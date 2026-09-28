@@ -1,8 +1,2 @@
-# symfony-testing's TestKernel boots Doctrine; with symfony/var-exporter 8 its
-# proxies need PHP's native lazy objects, which the kernel does not enable.
-doctrine:
-  orm:
-    enable_native_lazy_objects: true
-
 wexample_symfony_remote:
   clients: {}
