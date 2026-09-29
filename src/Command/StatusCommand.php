@@ -7,11 +7,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Wexample\PhpRemote\Class\RemoteRegistry;
+use Wexample\PhpRemote\Class\RemoteStatus;
+use Wexample\PhpRemote\Enum\RemoteState;
 use Wexample\SymfonyHelpers\Command\AbstractBundleCommand;
 use Wexample\SymfonyHelpers\Service\BundleService;
-use Wexample\SymfonyRemote\Class\RemoteStatus;
-use Wexample\SymfonyRemote\Enum\RemoteState;
-use Wexample\SymfonyRemote\Service\RemoteRegistry;
 use Wexample\SymfonyRemote\WexampleSymfonyRemoteBundle;
 
 /**

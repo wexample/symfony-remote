@@ -3,7 +3,7 @@
 namespace Wexample\SymfonyRemote\Tests\Integration;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Wexample\SymfonyRemote\Service\RemoteRegistry;
+use Wexample\PhpRemote\Class\RemoteRegistry;
 
 class RemoteRegistryWiringTest extends KernelTestCase
 {

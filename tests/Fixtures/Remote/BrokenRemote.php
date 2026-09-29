@@ -3,8 +3,8 @@
 namespace Wexample\SymfonyRemote\Tests\Fixtures\Remote;
 
 use RuntimeException;
-use Wexample\SymfonyRemote\Class\RemoteStatus;
-use Wexample\SymfonyRemote\Interface\RemoteInterface;
+use Wexample\PhpRemote\Class\RemoteStatus;
+use Wexample\PhpRemote\Interface\RemoteInterface;
 
 class BrokenRemote implements RemoteInterface
 {

@@ -2,20 +2,27 @@
 
 namespace Wexample\SymfonyRemote\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\RateLimiter\LimiterInterface;
+use Wexample\PhpApi\Common\ClientOptions;
+use Wexample\PhpRemote\Class\ApiClientFactory;
+use Wexample\PhpRemote\Class\ApiClientRemote;
+use Wexample\PhpRemote\Class\ClientDefinition;
+use Wexample\PhpRemote\Class\RemoteRegistry;
+use Wexample\PhpRemote\Interface\RemoteInterface;
 use Wexample\SymfonyHelpers\DependencyInjection\AbstractWexampleSymfonyExtension;
-use Wexample\SymfonyRemote\Class\ApiClientRemote;
-use Wexample\SymfonyRemote\Class\ClientDefinition;
-use Wexample\SymfonyRemote\Interface\RemoteInterface;
-use Wexample\SymfonyRemote\Service\ApiClientFactory;
+use Wexample\SymfonyRemote\Class\SymfonyRateLimiter;
 
 class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
 {
     public const string SERVICE_CLIENT_PREFIX = 'wexample_symfony_remote.client.';
 
     public const string SERVICE_REMOTE_PREFIX = 'wexample_symfony_remote.remote.';
+
+    public const string TAG_REMOTE = 'wexample_symfony_remote.remote';
 
     private const string LIMITER_PREFIX = 'wexample_remote_';
 
@@ -57,9 +64,15 @@ class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
 
         $config = $this->processConfiguration(new Configuration(), $configs);
 
+        // Implementing the interface is enough to be a remote.
         $container
             ->registerForAutoconfiguration(RemoteInterface::class)
-            ->addTag(RemoteInterface::TAG);
+            ->addTag(self::TAG_REMOTE);
+
+        $container->setDefinition(
+            RemoteRegistry::class,
+            new Definition(RemoteRegistry::class, [new TaggedIteratorArgument(self::TAG_REMOTE)])
+        );
 
         $classCounts = array_count_values(array_column($config['clients'], 'class'));
 
@@ -74,6 +87,7 @@ class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
         array $client,
         bool $aliasClass
     ): void {
+        $options = $client['options'];
         $definition = new Definition(ClientDefinition::class, [
             $key,
             $client['label'] ?? $key,
@@ -82,7 +96,13 @@ class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
             $client['api_key'],
             null !== $client['api_key'],
             $client['headers'],
-            $client['options'],
+            new Definition(ClientOptions::class, [
+                $options['timeout'],
+                $options['connect_timeout'],
+                $options['retries'],
+                $options['retry_delay'],
+                $options['rate_limit_delay'],
+            ]),
         ]);
 
         $clientId = self::SERVICE_CLIENT_PREFIX.$key;
@@ -92,7 +112,7 @@ class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
             ->setArguments([
                 $definition,
                 [] !== $client['rate_limit']
-                    ? new Reference('limiter.'.self::LIMITER_PREFIX.$key)
+                    ? $this->buildRateLimiter($key)
                     : null,
             ])
             ->setPublic(true);
@@ -107,6 +127,18 @@ class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
                 $definition,
                 new Reference($clientId),
             ]))
-            ->addTag(RemoteInterface::TAG);
+            ->addTag(self::TAG_REMOTE);
+    }
+
+    /**
+     * The framework limiter declared in prepend(), created for the client's key.
+     */
+    private function buildRateLimiter(string $key): Definition
+    {
+        return new Definition(SymfonyRateLimiter::class, [
+            (new Definition(LimiterInterface::class))
+                ->setFactory([new Reference('limiter.'.self::LIMITER_PREFIX.$key), 'create'])
+                ->setArguments([$key]),
+        ]);
     }
 }

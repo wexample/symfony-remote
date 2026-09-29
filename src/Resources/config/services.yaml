@@ -4,5 +4,7 @@ services:
         autoconfigure: true
         public: false
 
-    Wexample\SymfonyRemote\:
-        resource: '../../{Command,Service}'
+    Wexample\SymfonyRemote\Command\:
+        resource: '../../Command'
+
+    Wexample\PhpRemote\Class\ApiClientFactory: ~

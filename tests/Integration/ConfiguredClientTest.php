@@ -5,8 +5,8 @@ namespace Wexample\SymfonyRemote\Tests\Integration;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Wexample\SymfonyRemote\Enum\RemoteState;
-use Wexample\SymfonyRemote\Service\RemoteRegistry;
+use Wexample\PhpRemote\Class\RemoteRegistry;
+use Wexample\PhpRemote\Enum\RemoteState;
 use Wexample\SymfonyRemote\Tests\Fixtures\Client\DemoApiClient;
 
 class ConfiguredClientTest extends KernelTestCase

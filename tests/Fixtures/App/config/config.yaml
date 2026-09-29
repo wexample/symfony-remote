@@ -31,10 +31,6 @@ services:
     factory: [GuzzleHttp\HandlerStack, create]
     arguments: ['@test.mock_handler']
 
-  Wexample\SymfonyRemote\Service\ApiClientFactory:
+  Wexample\PhpRemote\Class\ApiClientFactory:
     arguments:
       $handlerStack: '@test.handler_stack'
-
-  # Public so the test container exposes it even though nothing injects it yet.
-  Wexample\SymfonyRemote\Service\RemoteRegistry:
-    public: true

@@ -2,8 +2,8 @@
 
 namespace Wexample\SymfonyRemote\Tests\Fixtures\Remote;
 
-use Wexample\SymfonyRemote\Class\RemoteStatus;
-use Wexample\SymfonyRemote\Interface\RemoteInterface;
+use Wexample\PhpRemote\Class\RemoteStatus;
+use Wexample\PhpRemote\Interface\RemoteInterface;
 
 class ReachableRemote implements RemoteInterface
 {

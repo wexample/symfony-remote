@@ -1,10 +1,15 @@
 # symfony-remote: scaffold and build the remote registry
 
 Opened: before 2026-09
-Updated: 2026-09-28
+Updated: 2026-09-29
 Author: agent, revised with the owner on 2026-09-28
 
 ## Status
+
+2026-09-29: the framework-free part — `RemoteInterface`, `RemoteStatus`, `RemoteState`,
+`RemoteRegistry`, `ClientDefinition`, `ApiClientFactory`, `ApiClientRemote`, the rate-limit
+middleware — moved to `php-remote` (`Wexample\PhpRemote\`), behind a `RateLimiterInterface`
+this bundle implements with `SymfonyRateLimiter`. Class names below are the pre-move ones.
 
 Validated with the owner on 2026-09-28 (decisions at the end). All steps done on
 2026-09-28: 16 tests green; `symfony-wex` declares `AgentServerRemote` and `WexBinaryRemote`
