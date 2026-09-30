@@ -2,4 +2,6 @@
 
 It is not a transport. Any service implementing `RemoteInterface` is a remote, whatever library it talks through. For HTTP APIs built on `wexample/php-api`, which carry the most boilerplate, a client is declared in configuration instead: base URL, key, headers, timeouts and retries, and a quota shared by every process of the app, built on Symfony's rate limiter.
 
+The framework-free part — the remote contract, the registry, the statuses and the php-api client building — is `wexample/php-remote`; this bundle wires it into Symfony.
+
 Screens to watch and test the remotes live in `symfony-remote-ds`; clients of one given service in `symfony-remote-<service>`.
