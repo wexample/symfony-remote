@@ -1,6 +1,6 @@
 # symfony-remote
 
-Version: 2.0.1
+Version: 2.0.2
 
 ## A php-api client from configuration
 
@@ -116,7 +116,7 @@ Visit the [Wexample Suite documentation](https://docs.wexample.com) for the comp
 - symfony/rate-limiter: ^7.4
 - wexample/php-api: >=5.0.0
 - wexample/php-remote: >=1.0.2
-- wexample/symfony-helpers: >=13.0.0
+- wexample/symfony-helpers: >=14.0.0
 
 ## Versioning & Compatibility Policy
 
