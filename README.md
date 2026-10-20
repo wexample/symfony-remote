@@ -1,6 +1,6 @@
 # symfony-remote
 
-Version: 2.0.8
+Version: 2.0.9
 
 ## A php-api client from configuration
 
@@ -114,7 +114,7 @@ The suite includes packages for configuration management, file handling, prompts
 - symfony/rate-limiter: ^7.4
 - wexample/php-api: >=5.0.0
 - wexample/php-remote: >=2.0.0
-- wexample/symfony-helpers: >=17.0.0
+- wexample/symfony-helpers: >=18.0.0
 
 ## Versioning & Compatibility Policy
 
