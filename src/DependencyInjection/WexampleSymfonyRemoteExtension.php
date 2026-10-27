@@ -94,7 +94,7 @@ class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
             $client['class'],
             $client['base_url'],
             $client['api_key'],
-            null !== $client['api_key'],
+            $client['api_key_required'] ?? null !== $client['api_key'],
             $client['headers'],
             new Definition(ClientOptions::class, [
                 $options['timeout'],
