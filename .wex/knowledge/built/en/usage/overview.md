@@ -19,6 +19,8 @@ Each entry gives:
 - a client service, `wexample_symfony_remote.client.billing`, also aliased to its class when no other entry uses that class, so `BillingClient $client` autowires;
 - a remote named `billing`, whose check requests the client's `PING_PATH` (the base URL unless the class redefines it).
 
+A declared `api_key` is required: the remote reads Unconfigured while it resolves empty. `api_key_required: false` says otherwise, for an API answering without a key and more with one — a public API rate-limited for anonymous callers.
+
 The class must keep the constructor of php-api's `Client`: base URL, API key, Guzzle client, default headers, `ClientOptions`. A client whose constructor differs is built by the application and declared as a remote the other way, below.
 
 `options` are php-api's `ClientOptions` in seconds; retries apply to idempotent methods only. `rate_limit` takes the options of a framework rate limiter and holds each request until a token is free, across every worker and web request of the app.

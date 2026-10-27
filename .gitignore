@@ -37,3 +37,4 @@ coverage*.lcov
 .scannerwork
 /vendor
 /tests/Fixtures/App/config/reference.php
+/node_modules

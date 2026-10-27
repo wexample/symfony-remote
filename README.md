@@ -1,6 +1,6 @@
 # symfony-remote
 
-Version: 2.0.10
+Version: 2.1.0
 
 Registry, health checks and configuration of the external services a Symfony app talks to
 
