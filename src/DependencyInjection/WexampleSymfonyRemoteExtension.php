@@ -53,6 +53,30 @@ class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
         }
     }
 
+    /**
+     * Declares clients from another bundle's prepend(): how a package built on
+     * this one — accounts of a host, providers of a model — makes each of its
+     * entries a client, built from its definition and checked among the app's
+     * remotes. An option left null is left out, so that its default applies.
+     *
+     * @param array<string, array<string, mixed>> $clients by key
+     */
+    public static function prependClients(
+        ContainerBuilder $container,
+        array $clients
+    ): void {
+        if ([] === $clients) {
+            return;
+        }
+
+        $container->prependExtensionConfig('wexample_symfony_remote', [
+            'clients' => array_map(
+                static fn (array $client): array => array_filter($client, static fn (mixed $value): bool => null !== $value),
+                $clients
+            ),
+        ]);
+    }
+
     public function load(
         array $configs,
         ContainerBuilder $container
