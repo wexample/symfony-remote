@@ -8,3 +8,6 @@ services:
         resource: '../../Command'
 
     Wexample\PhpRemote\Class\ApiClientFactory: ~
+
+    # A call to a remote that may fail without stopping the app (php-remote).
+    Wexample\PhpRemote\Class\RemoteGuard: ~

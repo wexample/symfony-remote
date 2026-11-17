@@ -54,3 +54,15 @@ bin/console remote:status --format=json
 ```
 
 The command fails when a remote is `Down`. `Unconfigured` does not fail it: missing credentials are a setup matter, not an outage. In code, `RemoteRegistry::checkAll()` and `check($key)` return the same `RemoteStatus` objects.
+
+## A call that may fail
+
+php-remote's `RemoteGuard` is a service: autowire it where a remote's failure must not stop the app — a scheduled import, a block of a page.
+
+```php
+public function __construct(private RemoteGuard $guard, private SenatDebatesClient $senat) {}
+
+$reports = $this->guard->attempt($this->senat, fn () => $this->senat->getReports(), []);
+```
+
+A failure is logged as a warning on the app's logger, under the remote's key, and the fallback comes back. Bugs — a `LogicException`, an `Error` — go through.
