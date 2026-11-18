@@ -3,7 +3,7 @@
   "description": "Registry, health checks and configuration of the external services a Symfony app talks to",
   "type": "library",
   "license": "MIT",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "autoload": {
     "psr-4": {
       "Wexample\\SymfonyRemote\\": "src/"
@@ -24,7 +24,7 @@
     "php": ">=8.5",
     "symfony/rate-limiter": "^7.4",
     "wexample/php-api": ">=5.1.0",
-    "wexample/php-remote": ">=3.0.0",
+    "wexample/php-remote": ">=4.0.0",
     "wexample/symfony-helpers": ">=19.3.0"
   },
   "require-dev": {
