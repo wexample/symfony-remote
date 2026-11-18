@@ -9,5 +9,10 @@ services:
 
     Wexample\PhpRemote\Class\ApiClientFactory: ~
 
+    # Where remotes say what happens to them: each RemoteSignal dispatched on the
+    # app's event dispatcher and logged (php-remote).
+    Wexample\PhpRemote\Class\RemoteReporter:
+        arguments: ['@?event_dispatcher', '@?logger']
+
     # A call to a remote that may fail without stopping the app (php-remote).
     Wexample\PhpRemote\Class\RemoteGuard: ~

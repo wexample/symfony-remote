@@ -65,4 +65,21 @@ public function __construct(private RemoteGuard $guard, private SenatDebatesClie
 $reports = $this->guard->attempt($this->senat, fn () => $this->senat->getReports(), []);
 ```
 
-A failure is logged as a warning on the app's logger, under the remote's key, and the fallback comes back. Bugs — a `LogicException`, an `Error` — go through.
+A failure is reported — logged as a warning, dispatched as a `RemoteSignal` — under the remote's key, and the fallback comes back. Bugs — a `LogicException`, an `Error` — go through.
+
+## Signals
+
+php-remote's `RemoteReporter` is a service on the app's event dispatcher and logger: a remote package injects it and reports what happens to it, in the one shape every remote shares.
+
+```php
+$this->reporter->anomaly(self::KEY, 'misdated_report', 'Report dated after today.', ['file' => $name], $name);
+```
+
+The guard reports its calls (`call_failed`, then the recovery), the registry its checks (`down`, then the recovery) — `remote:status` and the screen of symfony-remote-ds included. To act on them, subscribe to `RemoteSignal`:
+
+```php
+#[AsEventListener]
+public function __invoke(RemoteSignal $signal): void { /* … */ }
+```
+
+symfony-monitoring does: each failure or anomaly becomes an incident, each recovery closes it.

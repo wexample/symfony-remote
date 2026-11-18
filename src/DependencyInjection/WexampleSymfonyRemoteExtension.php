@@ -12,6 +12,7 @@ use Wexample\PhpRemote\Class\ApiClientFactory;
 use Wexample\PhpRemote\Class\ApiClientRemote;
 use Wexample\PhpRemote\Class\ClientDefinition;
 use Wexample\PhpRemote\Class\RemoteRegistry;
+use Wexample\PhpRemote\Class\RemoteReporter;
 use Wexample\PhpRemote\Interface\RemoteInterface;
 use Wexample\SymfonyHelpers\DependencyInjection\AbstractWexampleSymfonyExtension;
 use Wexample\SymfonyRemote\Class\SymfonyRateLimiter;
@@ -95,7 +96,7 @@ class WexampleSymfonyRemoteExtension extends AbstractWexampleSymfonyExtension
 
         $container->setDefinition(
             RemoteRegistry::class,
-            new Definition(RemoteRegistry::class, [new TaggedIteratorArgument(self::TAG_REMOTE)])
+            new Definition(RemoteRegistry::class, [new TaggedIteratorArgument(self::TAG_REMOTE), new Reference(RemoteReporter::class)])
         );
 
         $classCounts = array_count_values(array_column($config['clients'], 'class'));
